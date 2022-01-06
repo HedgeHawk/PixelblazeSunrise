@@ -1,7 +1,19 @@
-export var speedup=50 //set this to 1 for realtime sunrise
+/*
+ Sunrise pattern for Pixelblaze
+ Tested with Pixelblaze V2+ and 150 RGBW pixels
+ When power is applied to the controller, a sunrise starts from black over orange to all white and stays at white until reset.
+ Alternative Mode: An alternative constant ambient orange can be selected via GPIO
+ Author: HedgeHawk 06.01.2022
+*/
+
+//####START CONFIGURABLE PARAMETERS####
+export var disableAltMode=true //alt mode for non-sunrise time
+export var speedup=100 //set this to 1 for realtime sunrise
+
 export var risetime=9.15/speedup //65536*X seconds. 9.15=10 minutes
 export var color=0.02 //Hue of the sunrise 0.02 is a nice sunrise-orange
 export var altBrightness = 0.3 //Brightness for alternative mode
+//####END CONFIGURABLE PARAMETERS####
 
 export var t0 = time(risetime) //the time() sawtooth counter is not reset when the pattern is modified. We therefore base the pattern off the initial value when the pattern starts.
 export var t1=0 //Phase 1 counter. Brightness of the orange part
@@ -19,7 +31,7 @@ export function beforeRender(delta) {
 }
 
 export function render(index) {
-  if(digitalRead(4)||1){
+  if(disableAltMode || digitalRead(4)){
     idx=index/pixelCount
     if(t2==0){
       v=clamp(-1+triangle(idx)+(2*t1),0,1) //The triangle tip rises like the sun. Initial offset: -1 to start with just the tip. Final offset +1 to illuminate everything evenly. Clamp values between 0 and 1 to avoid looping of overflown values.
