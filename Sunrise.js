@@ -1,4 +1,5 @@
-export var risetime=0.15 //65536*X seconds. 9.15=10 minutes
+export var speedup=50 //set this to 1 for realtime sunrise
+export var risetime=9.15/speedup //65536*X seconds. 9.15=10 minutes
 export var color=0.02 //Hue of the sunrise 0.02 is a nice sunrise-orange
 export var altBrightness = 0.3 //Brightness for alternative mode
 
